@@ -60,7 +60,7 @@ module.exports = async function (context, req) {
         var q = `mutation {
             createConnection ( 
               input: {
-              oppId: ${oppId}
+              oppId: ${validParams.oppId}
                 comments: "Connection created by CaliforniaVolunteers"
                 volunteer: {
                   email: "${validParams.email}"
