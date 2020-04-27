@@ -85,10 +85,6 @@ module.exports = async function (context, req) {
         body: err
       }
     }
-    
-
-    // console.log('location: ',  response.data);
-
 
   }
     else {
