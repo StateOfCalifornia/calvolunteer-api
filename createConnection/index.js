@@ -32,24 +32,24 @@ function validateParams(req){
     };
 }
 
-module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
 
-  // Params: 
+// Params: 
     // oppId - Is either/or not both
     // email - Will always be based on ZIP
     // firstName - Default to true
     // lastName - in miles - ?
     // phoneNumber
     // zip
-    //acceptTermsAndConditions
+    // acceptTermsAndConditions
+module.exports = async function (context, req) {
+    context.log('JavaScript HTTP trigger function processed a request.');
     const reCaptchaOptions = {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
     };
-    const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
-    const postBody = `secret=6LfZl-8UAAAAAILEeAXKS8EvKrQMga_Z1c1mGmvd&response=${req.query.token}`;
+    const verificationUrl = process.env.RECAPTCHA_API_URL;
+    const postBody = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${req.query.token}`;
     const tokenVerification = await axios.post(verificationUrl, postBody, reCaptchaOptions)
 
     if(!tokenVerification.data.success) {

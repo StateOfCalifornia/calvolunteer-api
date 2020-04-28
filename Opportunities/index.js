@@ -1,5 +1,12 @@
 const axios = require('axios'); 
 
+// Params: 
+  // virtual - Is either/or not both
+  // location - Will always be based on ZIP
+  // isCovid19 - Default to true
+  // radius - in miles - ?
+  // pageNumber
+  // specialFlag = isCovid19 - takes only "covid19"
 module.exports = async function (context, req) {
   if (req.query.location || req.query.virtual) {
 
@@ -8,13 +15,6 @@ module.exports = async function (context, req) {
     let numberOfResults = req.query.numberOfResults && req.query.numberOfResults <= 100 ? req.query.numberOfResults : 100;
     let radius = req.query.radius ? req.query.radius : 15;
 
-  // Params: 
-    // virtual - Is either/or not both
-    // location - Will always be based on ZIP
-    // isCovid19 - Default to true
-    // radius - in miles - ?
-    // pageNumber
-    // specialFlag = isCovid19 - takes only "covid19"
 
     const VOL_MATCH_API_KEY = process.env.VOL_MATCH_API_KEY;
     const VOL_MATCH_API_URL = process.env.VOL_MATCH_API_URL;
