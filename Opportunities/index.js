@@ -1,7 +1,7 @@
 const axios = require('axios'); 
 
 module.exports = async function (context, req) {
-  if (req.query.location) {
+  if (req.query.location || req.query.virtual) {
 
     let pageNumber = req.query.pageNumber? req.query.pageNumber : 1;
     let isCovid19 = req.query.isCovid19 ? 'covid19' : '';
@@ -36,6 +36,7 @@ module.exports = async function (context, req) {
         sortCriteria: relevance
         specialFlag: "${isCovid19}"
         radius: "${radius}"
+        virtual: ${req.query.virtual}
       }){
         resultsSize,
         opportunities{
