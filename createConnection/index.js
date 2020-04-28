@@ -32,6 +32,54 @@ function validateParams(req){
     };
 }
 
+function generateQuery(params) {
+    return `mutation {
+        createConnection ( 
+            input: {
+            oppId: ${validParams.oppId}
+            comments: "Connection created by CaliforniaVolunteers"
+            volunteer: {
+                email: "${validParams.email}"
+                firstName: "${validParams.firstName}"
+                lastName: "${validParams.lastName}"
+                phoneNumber: "${validParams.phoneNumber}"
+                zipCode: "${validParams.zip}"
+                acceptTermsAndConditions: true
+            } 
+            }) 
+            {
+            comments
+            volunteer {
+                email
+                firstName
+                lastName
+                phoneNumber
+                zipCode
+            }
+            enlister {
+                email
+                firstName
+                lastName
+                phoneNumber
+                zipCode
+            }
+            shifts {
+                id
+                name
+                notes
+                date
+                startTime
+                endTime
+                volNeeded
+            }
+            replies {
+                id
+                values
+            }
+        }
+    }`;
+}
+
 
 // Params: 
     // oppId - Is either/or not both
@@ -42,7 +90,6 @@ function validateParams(req){
     // zip
     // acceptTermsAndConditions
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
     const reCaptchaOptions = {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -52,6 +99,8 @@ module.exports = async function (context, req) {
     const postBody = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${req.query.token}`;
     const tokenVerification = await axios.post(verificationUrl, postBody, reCaptchaOptions)
 
+
+    // Invalid Token Short Circuit
     if(!tokenVerification.data.success) {
         context.res = {
             status: 400,
@@ -60,12 +109,20 @@ module.exports = async function (context, req) {
         return;
     }
 
+    // Invalid Params Short Circuit
     var validParams = validateParams(req);
-    if (!validParams.errorMessage) {
+    if (validParams.errorMessage) {
+        context.res = {
+            status: 400,
+            body: {error: validParams.errorMessage}
+        };
+        return;
+    }
 
+    const query = generateQuery(validParams);
+    try {
         const VOL_MATCH_API_KEY = process.env.VOL_MATCH_API_KEY;
         const VOL_MATCH_API_URL = process.env.VOL_MATCH_API_URL;
-
         const volMatchOptions = {
             headers: {
                 'X-api-key': VOL_MATCH_API_KEY,
@@ -73,77 +130,24 @@ module.exports = async function (context, req) {
                 'Accept': 'application/json'
             }
         };
+        const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: query }), volMatchOptions)
 
-        var q = `mutation {
-            createConnection ( 
-              input: {
-              oppId: ${validParams.oppId}
-                comments: "Connection created by CaliforniaVolunteers"
-                volunteer: {
-                  email: "${validParams.email}"
-                  firstName: "${validParams.firstName}"
-                  lastName: "${validParams.lastName}"
-                  phoneNumber: "${validParams.phoneNumber}"
-                  zipCode: "${validParams.zip}"
-                  acceptTermsAndConditions: true
-                }
-              } ) {
-              comments
-              volunteer {
-                email
-                firstName
-                lastName
-                phoneNumber
-                zipCode
-              }
-              enlister {
-                email
-                firstName
-                lastName
-                phoneNumber
-                zipCode
-              }
-              shifts {
-                id
-                name
-                notes
-                date
-                startTime
-                endTime
-                volNeeded
-              }
-              replies {
-                id
-                values
-              }
-            }
-          }`;
-        try {
-            const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: q }), volMatchOptions)
-
-            // If no results found
-            if (!response.data.data.createConnection) {
-                context.res = {
-                    status: 400,
-                    body: {error: response.data.errors[0].message}
-                }
-            } else {
-                context.res = {
-                    body: response.data.data.createConnection
-                }
-            }
-
-        } catch (err) {
+        // If no results found
+        if (!response.data.data.createConnection) {
             context.res = {
                 status: 400,
-                body: {error: err}
+                body: {error: response.data.errors[0].message}
+            }
+        } else {
+            context.res = {
+                body: response.data.data.createConnection
             }
         }
-    }
-    else {
+
+    } catch (err) {
         context.res = {
             status: 400,
-            body: {error: validParams.errorMessage}
-        };
+            body: {error: err}
+        }
     }
 };
