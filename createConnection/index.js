@@ -41,15 +41,32 @@ module.exports = async function (context, req) {
     // firstName - Default to true
     // lastName - in miles - ?
     // phoneNumber
-    // zipCode
+    // zip
     //acceptTermsAndConditions
+    const reCaptchaOptions = {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    };
+    const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+    const postBody = `secret=6LfZl-8UAAAAAILEeAXKS8EvKrQMga_Z1c1mGmvd&response=${req.query.token}`;
+    const tokenVerification = await axios.post(verificationUrl, postBody, reCaptchaOptions)
+
+    if(!tokenVerification.data.success) {
+        context.res = {
+            status: 400,
+            body: {error: tokenVerification.data['error-codes']}
+        }; 
+        return;
+    }
+
     var validParams = validateParams(req);
     if (!validParams.errorMessage) {
 
         const VOL_MATCH_API_KEY = process.env.VOL_MATCH_API_KEY;
         const VOL_MATCH_API_URL = process.env.VOL_MATCH_API_URL;
 
-        const options = {
+        const volMatchOptions = {
             headers: {
                 'X-api-key': VOL_MATCH_API_KEY,
                 'Content-Type': 'application/json',
@@ -102,12 +119,13 @@ module.exports = async function (context, req) {
             }
           }`;
         try {
-            const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: q }), options)
+            const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: q }), volMatchOptions)
 
             // If no results found
             if (!response.data.data.createConnection) {
                 context.res = {
-                    body: response.data.errors[0].message
+                    status: 400,
+                    body: {error: response.data.errors[0].message}
                 }
             } else {
                 context.res = {
@@ -117,14 +135,15 @@ module.exports = async function (context, req) {
 
         } catch (err) {
             context.res = {
-                body: err
+                status: 400,
+                body: {error: err}
             }
         }
     }
     else {
         context.res = {
             status: 400,
-            body: validParamsMessage.errorMessage
+            body: {error: validParams.errorMessage}
         };
     }
 };
