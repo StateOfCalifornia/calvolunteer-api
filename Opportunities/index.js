@@ -17,7 +17,7 @@ module.exports = async function (context, req) {
     let virtual = req.query.virtual ? req.query.virtual : false;
     let categories = req.query.categories ? req.query.categories: '';
     let greatFor = req.query.greatFor ? req.query.greatFor : '';
-
+    let keywords = req.query.keywords ? req.query.keywords : '';
 
     const VOL_MATCH_API_KEY = process.env.VOL_MATCH_API_KEY;
     const VOL_MATCH_API_URL = process.env.VOL_MATCH_API_URL;
@@ -40,7 +40,8 @@ module.exports = async function (context, req) {
         specialFlag: "${isCovid19}"
         radius: "${radius}"
         virtual: ${virtual}
-        greatFor: [${greatFor}]
+        greatFor: [${greatFor}],
+        keywords: "${keywords}"
       }){
         resultsSize,
         currentPage,
