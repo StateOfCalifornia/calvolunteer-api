@@ -13,7 +13,8 @@ module.exports = async function (context, req) {
     let pageNumber = req.query.pageNumber? req.query.pageNumber : 1;
     let isCovid19 = req.query.isCovid19 ? 'covid19' : '';
     let numberOfResults = req.query.numberOfResults && req.query.numberOfResults <= 100 ? req.query.numberOfResults : 100;
-    let radius = req.query.radius ? req.query.radius : 15;
+    let radius = req.query.radius ? req.query.radius : 20;
+    let virtual = req.query.virtual ? req.query.virtual : false;
 
 
     const VOL_MATCH_API_KEY = process.env.VOL_MATCH_API_KEY;
@@ -36,7 +37,7 @@ module.exports = async function (context, req) {
         sortCriteria: relevance
         specialFlag: "${isCovid19}"
         radius: "${radius}"
-        virtual: ${req.query.virtual}
+        virtual: ${virtual}
       }){
         resultsSize,
         opportunities{
