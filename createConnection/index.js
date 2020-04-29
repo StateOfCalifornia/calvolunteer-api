@@ -4,7 +4,7 @@ function validateParams(req){
     const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     const zipRegexp =  /^\d{5}$|^\d{5}-\d{4}$/;
     if(!req.query.oppId){
-        return {errorMessage:'No Organization() Selected'};
+        return {errorMessage:'No Organization Selected'};
     }
 
     if(!emailRegexp.test(req.query.email)){
@@ -22,13 +22,17 @@ function validateParams(req){
     if(!req.query.lastName){
         return {errorMessage:'No Last Name'};
     }
-    return {
+    if(req.query.acceptTermsAndConditions !== 'true'){
+        return {errorMessage:'Invalid Accept Terms And Conditions'};
+    }
+     return {
         oppId: req.query.oppId,
         email: req.query.email,
         zip: req.query.zip,
         lastName: req.query.lastName,
         firstName: req.query.firstName,
-        phoneNumber: req.query.phoneNumber
+        phoneNumber: req.query.phoneNumber,
+        acceptTermsAndConditions: req.query.acceptTermsAndConditions
     };
 }
 
@@ -44,7 +48,7 @@ function generateQuery(params) {
                 lastName: "${params.lastName}"
                 phoneNumber: "${params.phoneNumber}"
                 zipCode: "${params.zip}"
-                acceptTermsAndConditions: true
+                acceptTermsAndConditions: ${params.acceptTermsAndConditions}
             } 
             }) 
             {

@@ -11,10 +11,12 @@ module.exports = async function (context, req) {
   if (req.query.location || req.query.virtual) {
 
     let pageNumber = req.query.pageNumber? req.query.pageNumber : 1;
-    let isCovid19 = req.query.isCovid19 ? 'covid19' : '';
+    let isCovid19 = req.query.isCovid19 === 'true' ? 'covid19' : '';
     let numberOfResults = req.query.numberOfResults && req.query.numberOfResults <= 100 ? req.query.numberOfResults : 100;
     let radius = req.query.radius ? req.query.radius : 20;
     let virtual = req.query.virtual ? req.query.virtual : false;
+    let categories = req.query.categories ? req.query.categories: '';
+    let greatFor = req.query.greatFor ? req.query.greatFor : '';
 
 
     const VOL_MATCH_API_KEY = process.env.VOL_MATCH_API_KEY;
@@ -31,35 +33,75 @@ module.exports = async function (context, req) {
     const q = `query {
       searchOpportunities(input:{
         location: "${req.query.location}"
-        categories:[]
+        categories: [${categories}]
         pageNumber:${pageNumber}
         numberOfResults: ${numberOfResults}
         sortCriteria: relevance
         specialFlag: "${isCovid19}"
         radius: "${radius}"
         virtual: ${virtual}
+        greatFor: [${greatFor}]
       }){
         resultsSize,
+        currentPage,
+        numberOfResults,
         opportunities{
           id,
           title, 
           categories,
+          greatFor,
           specialFlag,
           description,
           volunteersNeeded,
-          location{
-            city
-            country
-            postalCode
-            region
-            street1
-            street2
-            virtual
-            postalCode
+          imageUrl,
+          skillsNeeded,
+          dateRange{
+            endDate,
+            endTime,
+            ongoing,
+            singleDayOpps,
+            startDate,
+            startTime
+          },
+          parentOrg {
+            id,
+            phoneNumber,
+            imageUrl,
+            url,
+            mission,
+            name,
+            description,
+            mission,
+            name,
+            location {
+              city,
+              country,
+              postalCode,
+              region,
+              street1,
+              street2,
+              virtual,
+            }
+          },
+          requirements {
+            bgCheck,
+            drLicense,
+            minimumAge,
+            orientation,
+          },
+         location{
+            city,
+            country,
+            postalCode,
+            region,
+            street1,
+            street2,
+            virtual,
+            postalCode,
             geoLocation {
-              accuracy
-              latitude
-              longitude
+              accuracy,
+              latitude,
+              longitude,
             }
           }
       }}
