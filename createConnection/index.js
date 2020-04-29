@@ -36,14 +36,14 @@ function generateQuery(params) {
     return `mutation {
         createConnection ( 
             input: {
-            oppId: ${validParams.oppId}
+            oppId: ${params.oppId}
             comments: "Connection created by CaliforniaVolunteers"
             volunteer: {
-                email: "${validParams.email}"
-                firstName: "${validParams.firstName}"
-                lastName: "${validParams.lastName}"
-                phoneNumber: "${validParams.phoneNumber}"
-                zipCode: "${validParams.zip}"
+                email: "${params.email}"
+                firstName: "${params.firstName}"
+                lastName: "${params.lastName}"
+                phoneNumber: "${params.phoneNumber}"
+                zipCode: "${params.zip}"
                 acceptTermsAndConditions: true
             } 
             }) 
