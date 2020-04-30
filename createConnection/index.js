@@ -84,7 +84,7 @@ function generateQuery(params) {
     }`;
 }
 
-async function validateCaptcha(){
+async function validateCaptcha(req){
     if(process.env.RECAPTCHA_SECRET_KEY){
         const reCaptchaOptions = {
             headers: {
