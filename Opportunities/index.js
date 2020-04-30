@@ -20,6 +20,7 @@ const generateQuery = (params) => `query {
     virtual: ${params.virtual}
     greatFor: [${params.greatFor}],
     keywords: "${params.keywords}"
+    skills: [${params.skills}]
   }){
     resultsSize,
     currentPage,
@@ -112,7 +113,7 @@ module.exports = async function (context, req) {
   let categories = req.query.categories ? req.query.categories : '';
   let greatFor = req.query.greatFor ? req.query.greatFor : '';
   let keywords = req.query.keywords ? req.query.keywords : '';
-
+  let skills = req.query.skills ? `"${req.query.skills.split(",").join('","')}"` : '';
   const VOL_MATCH_API_URL = process.env.VOL_MATCH_API_URL;
 
 
@@ -127,6 +128,7 @@ module.exports = async function (context, req) {
       isCovid19,
       pageNumber,
       numberOfResults,
+      skills
     }
     const vmQuery = generateQuery(params);
     const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: vmQuery }), options)

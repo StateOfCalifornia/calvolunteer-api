@@ -84,6 +84,29 @@ function generateQuery(params) {
     }`;
 }
 
+async function validateCaptcha(){
+    if(process.env.RECAPTCHA_SECRET_KEY){
+        const reCaptchaOptions = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        };
+        const verificationUrl = process.env.RECAPTCHA_API_URL;
+        const postBody = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${req.query.token}`;
+        const tokenVerification = await axios.post(verificationUrl, postBody, reCaptchaOptions)
+        return tokenVerification;
+    }
+    else{
+        // since no key specified, presume no need for recaptch 
+        // so presume validated.....
+        return {
+            data: {
+                success: true
+            }
+        }
+    }
+}
+
 
 // Params: 
     // oppId - Is either/or not both
@@ -94,17 +117,8 @@ function generateQuery(params) {
     // zip
     // acceptTermsAndConditions
 module.exports = async function (context, req) {
-    const reCaptchaOptions = {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-    };
-    const verificationUrl = process.env.RECAPTCHA_API_URL;
-    const postBody = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${req.query.token}`;
-    const tokenVerification = await axios.post(verificationUrl, postBody, reCaptchaOptions)
-
-
     // Invalid Token Short Circuit
+    var tokenVerification = await validateCaptcha(req);
     if(!tokenVerification.data.success) {
         context.res = {
             status: 400,
