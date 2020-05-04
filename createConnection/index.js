@@ -52,6 +52,7 @@ function generateQuery(params) {
             } 
             }) 
             {
+            oppId
             comments
             volunteer {
                 email
