@@ -96,11 +96,14 @@ const generateQuery = (params) => `query {
 // pageNumber
 // specialFlag = isCovid19 - takes only "covid19"
 module.exports = async function (context, req) {
-  if (!req.query.location && !req.query.virtual) {
+  context.log('Opp Request Headers = ', JSON.stringify(req.headers));
+  context.log('Opp Request Query = ', JSON.stringify(req.query));
+if (!req.query.location && !req.query.virtual) {
     context.res = {
       status: 400,
       body: "location or virtual parameter is required"
     };
+    context.log('Request return = ', JSON.stringify(context.res));
     return;
   }
 
@@ -152,4 +155,5 @@ module.exports = async function (context, req) {
       body: err
     }
   }
+  context.log('Request return = ', JSON.stringify(context.res).substr(0,200));
 };

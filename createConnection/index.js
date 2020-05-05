@@ -118,6 +118,8 @@ async function validateCaptcha(req){
     // zip
     // acceptTermsAndConditions
 module.exports = async function (context, req) {
+    context.log('Connection Request Headers = ', JSON.stringify(req.headers));
+    context.log('Connection Request Query = ', JSON.stringify(req.query));
     // Invalid Token Short Circuit
     var tokenVerification = await validateCaptcha(req);
     if(!tokenVerification.data.success) {
@@ -135,6 +137,7 @@ module.exports = async function (context, req) {
             status: 400,
             body: {error: validParams.errorMessage}
         };
+        context.log('Request return = ', JSON.stringify(context.res));
         return;
     }
 
@@ -169,4 +172,5 @@ module.exports = async function (context, req) {
             body: {error: err}
         }
     }
+    context.log('Request return = ', JSON.stringify(context.res));
 };
