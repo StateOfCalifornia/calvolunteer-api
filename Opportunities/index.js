@@ -145,7 +145,8 @@ if (!req.query.location && !req.query.virtual) {
         }
       }
     } else {
-      context.res = {
+       context.res = {
+        status: 503,
         body: response.data.data.searchOpportunities
       }
     }
