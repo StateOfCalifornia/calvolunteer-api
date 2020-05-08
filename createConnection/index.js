@@ -162,13 +162,14 @@ module.exports = async function (context, req) {
             }
         } else {
             context.res = {
+                status: response.status,
                 body: response.data.data.createConnection
             }
         }
 
     } catch (err) {
         context.res = {
-            status: 400,
+            status: err.response.status,
             body: {error: err}
         }
     }

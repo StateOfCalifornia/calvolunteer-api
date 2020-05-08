@@ -98,7 +98,7 @@ const generateQuery = (params) => `query {
 module.exports = async function (context, req) {
   context.log('Opp Request Headers = ', JSON.stringify(req.headers));
   context.log('Opp Request Query = ', JSON.stringify(req.query));
-if (!req.query.location && !req.query.virtual) {
+  if (!req.query.location && !req.query.virtual) {
     context.res = {
       status: 400,
       body: "location or virtual parameter is required"
@@ -139,6 +139,7 @@ if (!req.query.location && !req.query.virtual) {
     // If no results found
     if (!response.data.data.searchOpportunities) {
       context.res = {
+        status: response.status,
         body: {
           resultsSize: 0,
           opportunities: []
@@ -146,12 +147,14 @@ if (!req.query.location && !req.query.virtual) {
       }
     } else {
        context.res = {
+        status: response.status,
         body: response.data.data.searchOpportunities
       }
     }
 
   } catch (err) {
     context.res = {
+      status: err.response.status,
       body: err
     }
   }
