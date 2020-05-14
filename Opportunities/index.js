@@ -8,13 +8,17 @@ const options = {
   }
 };
 
+const filterCAOrg = (opportunities) => {
+  var caOnlyOrgs = opportunities.filter(opp => opp.parentOrg.location.region === 'CA');
+  return caOnlyOrgs;
+}
+
 const generateQuery = (params) => `query {
   searchOpportunities(input:{
     location: "${params.location}"
     categories: [${params.categories}]
     pageNumber:${params.pageNumber}
     numberOfResults: ${params.numberOfResults}
-    sortCriteria: relevance
     specialFlag: "${params.isCovid19}"
     radius: "${params.radius}"
     virtual: ${params.virtual}
@@ -137,7 +141,8 @@ module.exports = async function (context, req) {
     const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: vmQuery }), options)
 
     // If no results found
-    if (!response.data.data.searchOpportunities) {
+    var searchOpportunities = response.data.data.searchOpportunities
+    if (!searchOpportunities) {
       context.res = {
         status: response.status,
         body: {
@@ -146,6 +151,10 @@ module.exports = async function (context, req) {
         }
       }
     } else {
+      if(virtual){
+        searchOpportunities.opportunities = filterCAOrg (searchOpportunities.opportunities);
+        searchOpportunities.numberOfResults = searchOpportunities.opportunities.length;
+      }
        context.res = {
         status: response.status,
         body: response.data.data.searchOpportunities
