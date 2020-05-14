@@ -23,15 +23,18 @@ const generateQuery = (params) => `query {
     radius: "${params.radius}"
     virtual: ${params.virtual}
     greatFor: [${params.greatFor}],
-    keywords: "${params.keywords}"
-    skills: [${params.skills}]
-  }){
+    keywords: "${params.keywords}",
+    skills: [${params.skills}],
+    sortCriteria: container, 
+    sortByContainers: ["tier0ca", "tier1ca", "tier2ca", "tier3ca"], 
+}){
     resultsSize,
     currentPage,
     numberOfResults,
     opportunities{
       id,
       title, 
+      container,
       categories,
       greatFor,
       specialFlag,
@@ -138,7 +141,8 @@ module.exports = async function (context, req) {
       skills
     }
     const vmQuery = generateQuery(params);
-    const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: vmQuery }), options)
+    var jsonQuery = JSON.stringify({ query: vmQuery });
+    const response = await axios.post(VOL_MATCH_API_URL, jsonQuery, options)
 
     // If no results found
     var searchOpportunities = response.data.data.searchOpportunities
