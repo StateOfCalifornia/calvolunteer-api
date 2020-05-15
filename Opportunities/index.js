@@ -119,7 +119,7 @@ module.exports = async function (context, req) {
   let isCovid19 = req.query.isCovid19 === 'true' ? 'covid19' : '';
   let numberOfResults = req.query.numberOfResults && req.query.numberOfResults <= 100 ? req.query.numberOfResults : 100;
   let radius = req.query.radius ? req.query.radius : 20;
-  let virtual = req.query.virtual ? req.query.virtual : false;
+  let virtual = req.query.virtual === 'true' ? true : false;
   let categories = req.query.categories ? req.query.categories : '';
   let greatFor = req.query.greatFor ? req.query.greatFor : '';
   let keywords = req.query.keywords ? req.query.keywords : '';
