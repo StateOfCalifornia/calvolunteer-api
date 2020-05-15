@@ -11,8 +11,8 @@ function validateParams(req){
         return {errorMessage:'Invalid Email'};
     }
 
-    if(!zipRegexp.test(req.query.zip)){
-        return {errorMessage:'Invalid zip'};
+    if(!zipRegexp.test(req.query.zipCode)){
+        return {errorMessage:'Invalid Zip Code'};
     }
 
     if(!req.query.firstName){
@@ -28,7 +28,7 @@ function validateParams(req){
      return {
         oppId: req.query.oppId,
         email: req.query.email,
-        zip: req.query.zip,
+        zipCode: req.query.zipCode,
         lastName: req.query.lastName,
         firstName: req.query.firstName,
         phoneNumber: req.query.phoneNumber,
@@ -47,7 +47,7 @@ function generateQuery(params) {
                 firstName: "${params.firstName}"
                 lastName: "${params.lastName}"
                 phoneNumber: "${params.phoneNumber}"
-                zipCode: "${params.zip}"
+                zipCode: "${params.zipCode}"
                 acceptTermsAndConditions: ${params.acceptTermsAndConditions}
             } 
             }) 
