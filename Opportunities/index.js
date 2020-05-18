@@ -90,8 +90,15 @@ const generateQuery = (params) => `query {
           latitude,
           longitude,
         }
+      },
+      customFields {
+        fieldId
+        fieldLabel
+        fieldType
+        required
+        choices
       }
-  }}
+ }}
 }`;
 
 
@@ -162,7 +169,7 @@ module.exports = async function (context, req) {
        context.res = {
         status: response.status,
         body: response.data.data.searchOpportunities
-      }
+     }
     }
 
   } catch (err) {
