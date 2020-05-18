@@ -167,9 +167,12 @@ module.exports = async function (context, req) {
 
       if(virtual){
         searchOpportunities.opportunities = filterCAOrg (searchOpportunities.opportunities);
-        searchOpportunities.numberOfResults = searchOpportunities.opportunities.length;
       }
-       context.res = {
+
+      // fix the numberOfResults
+      searchOpportunities.numberOfResults = searchOpportunities.opportunities.length;
+
+      context.res = {
         status: response.status,
         body: response.data.data.searchOpportunities
      }
