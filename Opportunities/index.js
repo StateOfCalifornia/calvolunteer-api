@@ -12,6 +12,7 @@ const filterCAOrg = (opportunities) => {
   var caOnlyOrgs = opportunities.filter(opp => opp.parentOrg.location.region === 'CA');
   return caOnlyOrgs;
 }
+const filterRequiredFields = (opportunities) => opportunities.filter(opp => opp.customFields.filter(cf => cf.required).length === 0);
 
 const generateQuery = (params) => `query {
   searchOpportunities(input:{
@@ -162,6 +163,8 @@ module.exports = async function (context, req) {
         }
       }
     } else {
+      searchOpportunities.opportunities = filterRequiredFields(searchOpportunities.opportunities);
+
       if(virtual){
         searchOpportunities.opportunities = filterCAOrg (searchOpportunities.opportunities);
         searchOpportunities.numberOfResults = searchOpportunities.opportunities.length;
