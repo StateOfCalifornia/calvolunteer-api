@@ -163,11 +163,11 @@ module.exports = async function (context, req) {
         }
       }
     } else {
+      // filter out opportunities with required custom fields
       searchOpportunities.opportunities = filterRequiredFields(searchOpportunities.opportunities);
 
-      if(virtual){
-        searchOpportunities.opportunities = filterCAOrg (searchOpportunities.opportunities);
-      }
+      // filter out all non california based orgs
+      searchOpportunities.opportunities = filterCAOrg (searchOpportunities.opportunities);
 
       // fix the numberOfResults
       searchOpportunities.numberOfResults = searchOpportunities.opportunities.length;
