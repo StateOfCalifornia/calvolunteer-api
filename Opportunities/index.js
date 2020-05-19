@@ -125,13 +125,13 @@ module.exports = async function (context, req) {
   let location = req.query.location;
   let pageNumber = req.query.pageNumber ? req.query.pageNumber : 1;
   let isCovid19 = req.query.isCovid19 === 'true' ? 'covid19' : '';
-  let numberOfResults = req.query.numberOfResults && req.query.numberOfResults <= 100 ? req.query.numberOfResults : 100;
   let radius = req.query.radius ? req.query.radius : 20;
   let virtual = req.query.virtual === 'true' ? true : false;
   let categories = req.query.categories ? req.query.categories : '';
   let greatFor = req.query.greatFor ? req.query.greatFor : '';
   let keywords = req.query.keywords ? req.query.keywords : '';
   let skills = req.query.skills ? `"${req.query.skills.split(",").join('","')}"` : '';
+  let numberOfResults = virtual ? 100 : 25;  //for local searches do only 25 results per volunteermatch request.
   const VOL_MATCH_API_URL = process.env.VOL_MATCH_API_URL;
 
 
