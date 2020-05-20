@@ -41,7 +41,7 @@ function generateQuery(params) {
         createConnection ( 
             input: {
             oppId: ${params.oppId}
-            comments: "Connection created by CaliforniaVolunteers"
+            comments: "Connection created by #CaliforniansForAll"
             volunteer: {
                 email: "${params.email}"
                 firstName: "${params.firstName}"
