@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createQuery should return graphql 1`] = `
+"query {
+    searchOpportunities(input:{
+      ids: []
+      location: \\"california\\"
+      categories: [1,2,3]
+      pageNumber:22
+      numberOfResults: 14
+      specialFlag: \\"false\\"
+      radius: \\"12\\"
+      virtual: false
+      greatFor: [kids,teens],
+      keywords: \\"tutoring\\",
+      skills: [reading,writing],
+      sortCriteria: container, 
+      sortByContainers: [\\"tier0ca\\", \\"tier1ca\\", \\"tier2ca\\", \\"tier3ca\\"], 
+  }){
+      currentPage,
+      numberOfResults,
+      resultsSize,
+      sortCriteria,
+      opportunities{
+        categories,
+        container,
+        description,
+        greatFor,
+        groupSize,
+        id,
+        imageUrl,
+        plaintextDescription,
+        shifts {
+          date,
+          endTime,
+          id,
+          name,
+          notes,
+          startTime,
+          volNeeded
+        },
+        skillsNeeded,
+        specialFlag,
+        tags,
+        timeCommitment,
+        title, 
+        url,
+        volunteersNeeded,
+        customFields {
+          fieldId
+          fieldLabel
+          fieldType
+          required
+          choices
+        }
+        dateRange{
+          endDate,
+          endTime,
+          ongoing,
+          singleDayOpps,
+          startDate,
+          startTime
+        },
+        parentOrg {
+          categories,
+          classification,
+          description,
+          ein,
+          id,
+          imageUrl,
+          mission,
+          name,
+          phoneNumber,
+          plaintextDescription,
+          url,
+          location {
+            city,
+            country,
+            postalCode,
+            region,
+            street1,
+            street2,
+            virtual,
+            geoLocation {
+              accuracy,
+              latitude,
+              longitude,
+            }  
+          }
+        },
+        requirements {
+          bgCheck,
+          drLicense,
+          minimumAge,
+          orientation,
+        },
+        location{
+          city,
+          country,
+          region,
+          street1,
+          street2,
+          virtual,
+          postalCode,
+          geoLocation {
+            accuracy,
+            latitude,
+            longitude,
+          }
+        },
+   }}
+  }"
+`;

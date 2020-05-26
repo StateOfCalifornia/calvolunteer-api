@@ -4,10 +4,15 @@
   "description": "",
   "scripts": {
     "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:integration": "jest -i integration/integrationtest.js -c jest.config.integration.js",
+    "test:integration:watch": "jest -i integration/integrationtest.js -c jest.config.integration.js --watch"
   },
   "dependencies": {
     "axios": "^0.19.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jest": "^26.0.1"
+  }
 }

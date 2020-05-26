@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createQuery should return graphql 1`] = `
+"mutation {
+        createConnection ( 
+            input: {
+            oppId: 1234
+            replies: [{ id: 123, values: [\\"a\\",\\"b\\"] },]
+            comments: \\"Connection created by #CaliforniansForAll\\"
+            volunteer: {
+                email: \\"a@b.com\\"
+                firstName: \\"first\\"
+                lastName: \\"last\\"
+                phoneNumber: \\"123-456-7890\\"
+                zipCode: \\"12345\\"
+                acceptTermsAndConditions: true
+            } 
+            }) 
+            {
+            oppId
+            comments
+            volunteer {
+                email
+                firstName
+                lastName
+                phoneNumber
+                zipCode
+            }
+            enlister {
+                email
+                firstName
+                lastName
+                phoneNumber
+                zipCode
+            }
+            shifts {
+                id
+                name
+                notes
+                date
+                startTime
+                endTime
+                volNeeded
+            }
+            replies {
+                id
+                values
+            }
+        }
+    }"
+`;
+
+exports[`createQuery should return graphql with no replies set 1`] = `
+"mutation {
+        createConnection ( 
+            input: {
+            oppId: 1234
+            replies: []
+            comments: \\"Connection created by #CaliforniansForAll\\"
+            volunteer: {
+                email: \\"a@b.com\\"
+                firstName: \\"first\\"
+                lastName: \\"last\\"
+                phoneNumber: \\"123-456-7890\\"
+                zipCode: \\"12345\\"
+                acceptTermsAndConditions: true
+            } 
+            }) 
+            {
+            oppId
+            comments
+            volunteer {
+                email
+                firstName
+                lastName
+                phoneNumber
+                zipCode
+            }
+            enlister {
+                email
+                firstName
+                lastName
+                phoneNumber
+                zipCode
+            }
+            shifts {
+                id
+                name
+                notes
+                date
+                startTime
+                endTime
+                volNeeded
+            }
+            replies {
+                id
+                values
+            }
+        }
+    }"
+`;

@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getParameters should return proper json with false literal 1`] = `
+Object {
+  "categories": "1,2,3",
+  "covid19Flag": "",
+  "greatFor": "kids,teens",
+  "ids": "1,2,3",
+  "keywords": "tutoring",
+  "location": "california",
+  "numberOfResults": 25,
+  "pageNumber": 22,
+  "radius": 12,
+  "skills": "\\"reading\\",\\"writing\\"",
+  "virtual": false,
+}
+`;
+
+exports[`getParameters should return proper json with true literal 1`] = `
+Object {
+  "categories": "1,2,3",
+  "covid19Flag": "covid19",
+  "greatFor": "kids,teens",
+  "ids": "1,2,3",
+  "keywords": "hospice care",
+  "location": "california",
+  "numberOfResults": 100,
+  "pageNumber": 44,
+  "radius": 55,
+  "skills": "\\"reading\\",\\"writing\\"",
+  "virtual": true,
+}
+`;
+
+exports[`getParameters should set defaults 1`] = `
+Object {
+  "categories": "",
+  "covid19Flag": "",
+  "greatFor": "",
+  "ids": "",
+  "keywords": "",
+  "location": "california",
+  "numberOfResults": 25,
+  "pageNumber": 1,
+  "radius": 20,
+  "skills": "",
+  "virtual": false,
+}
+`;
+
+exports[`getParameters should set defaults with virtual 1`] = `
+Object {
+  "categories": "",
+  "covid19Flag": "",
+  "greatFor": "",
+  "ids": "",
+  "keywords": "",
+  "location": "",
+  "numberOfResults": 100,
+  "pageNumber": 1,
+  "radius": 20,
+  "skills": "",
+  "virtual": true,
+}
+`;
