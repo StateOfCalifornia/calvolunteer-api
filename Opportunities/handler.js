@@ -3,8 +3,8 @@ const filter = require('./filters')
 module.exports = {
     validateRequest: (req) => {
         var message = '';
-        if (!req.query.location && !req.query.virtual) {
-            message = 'location or virtual parameter is required';
+        if (!req.query.location && !req.query.virtual && !req.query.ids) {
+            message = 'location, virtual, or ids parameter is required';
         }
         return message;
     },
