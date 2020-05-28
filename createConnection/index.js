@@ -1,28 +1,28 @@
-const axios = require('axios'); 
+const axios = require('axios');
 const query = require('./query');
 const validate = require('./validate');
 
 
 
 // Params: 
-    // oppId - Is either/or not both
-    // email - Will always be based on ZIP
-    // firstName - Default to true
-    // lastName - in miles - ?
-    // phoneNumber
-    // zip
-    // acceptTermsAndConditions
+// oppId - Is either/or not both
+// email - Will always be based on ZIP
+// firstName - Default to true
+// lastName - in miles - ?
+// phoneNumber
+// zip
+// acceptTermsAndConditions
 module.exports = async function (context, req) {
     context.log('Connection Request Headers = ', JSON.stringify(req.headers));
     context.log('Connection Request Query = ', JSON.stringify(req.query));
     context.log('Connection Request Body = ', JSON.stringify(req.body));
     // Invalid Token Short Circuit
     var tokenVerification = await validate.validateCaptcha(req);
-    if(!tokenVerification.data.success) {
+    if (!tokenVerification.data.success) {
         context.res = {
             status: 400,
-            body: {error: tokenVerification.data['error-codes']}
-        }; 
+            body: { error: tokenVerification.data['error-codes'] }
+        };
         context.log('Connection Request return = ', JSON.stringify(context.res));
         return;
     }
@@ -32,7 +32,7 @@ module.exports = async function (context, req) {
     if (validParams.errorMessage) {
         context.res = {
             status: 400,
-            body: {error: validParams.errorMessage}
+            body: { error: validParams.errorMessage }
         };
         context.log('Connection Request return = ', JSON.stringify(context.res));
         return;
@@ -55,7 +55,7 @@ module.exports = async function (context, req) {
         if (!response.data.data.createConnection) {
             context.res = {
                 status: 400,
-                body: {error: response.data.errors[0].message}
+                body: { error: response.data.errors[0].message }
             }
         } else {
             context.res = {
@@ -65,9 +65,10 @@ module.exports = async function (context, req) {
         }
 
     } catch (err) {
+        context.log(err);
         context.res = {
-            status: err.response.status,
-            body: {error: err}
+            status: 500,
+            body: err.message
         }
     }
     context.log('Connection Request return = ', JSON.stringify(context.res));

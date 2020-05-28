@@ -25,17 +25,10 @@ let queriesOpportunities = [
 
 
 ];
-let expectedNumberOfResultsOpportunities = [0, 0, 0, 0, 1, 1, 1, 9, 20, 21, 24, 24, 22, 25, 22, 3,]
+let expectedNumberOfResultsOpportunities = [0, 0, 0, 0, 1, 1, 1, 9, 20, 23, 23, 25, 22, 25, 22, 3,]
 
 
 
-let queriesConnectionsGet = [
-    { oppId: '585778', firstName: 'testingFirst', lastName: 'testingLast', zipCode: '12345', phoneNumber: '1234567890', email: `test@a.com` },
-    { oppId: '585778', firstName: 'testingFirst', lastName: 'testingLast', zipCode: '12345', phoneNumber: '1234567890', email: `test.${new Date().getTime()}@a.com` },
-]
-let expectedResultCodeConnectionGet = [200, 400];
-
-var email = `test_${new Date().getTime()}@a.com`;
 replies = [{
     id: 11695,
     values: ['a school affiliation']
@@ -44,11 +37,6 @@ replies = [{
     id: 11696,
     values: ['Sunday Evening', 'Sunday Afternoon']
 }];
-let queriesConnectionsPost = [
-    { oppId: '585778', firstName: 'testingFirst', lastName: 'testingLast', zipCode: '12345', phoneNumber: '1234567890', email, replies },
-    { oppId: '585778', firstName: 'testingFirst', lastName: 'testingLast', zipCode: '12345', phoneNumber: '1234567890', email },
-]
-let expectedResultCodeConnectionPost = [200, 400];
 
 test('Opportunities', async () => {
     for (let index = 0; index < queriesOpportunities.length; index++) {
@@ -64,32 +52,57 @@ test('Opportunities', async () => {
 });
 
 
-
-
-
-test('createConnectionGet', async () => {
-    for (let index = 0; index < queriesConnectionsGet.length; index++) {
-        const element = queriesConnectionsGet[index];
-        jest.setTimeout(30000);
+test('createConnectionGet should return 400 for exising connection', async () => {
+    const element = { params: { oppId: '585778', firstName: 'testingFirst', lastName: 'testingLast', zipCode: '12345', phoneNumber: '1234567890', email: `test@a.com`, acceptTermsAndConditions: 'true' } };
+    try {
         var result = await axios.get(
             'http://localhost:7071/api/createConnection',
             element,
         );
-        expect(result.resultCode).toEqual(expectedResultCodeConnectionGet[index]);
-        expect(result.data).toMatchSnapshot();
+        expect(result.status).toEqual(2000);
+    }
+    catch (err) {
+        expect(err.response.data.error).toContain('already exists');
+        expect(err.response.status).toEqual(400);
     }
 });
 
-test('createConnectionPost', async () => {
-    for (let index = 0; index < queriesConnectionsGet.length; index++) {
-        const element = queriesConnectionsGet[index];
-        jest.setTimeout(30000);
+test('createConnectionGet should return 200 for new connection', async () => {
+    const element = { params: { oppId: '585778', firstName: 'testingFirst', lastName: 'testingLast', zipCode: '12345', phoneNumber: '1234567890', email: `test.${new Date().getTime()}@a.com`, acceptTermsAndConditions: 'true' } };
+
+    var result = await axios.get(
+        'http://localhost:7071/api/createConnection',
+        element,
+    );
+    expect(result.status).toEqual(200);
+});
+
+test('createConnectionPost should succeed on new email', async () => {
+    var email = `test_${new Date().getTime()}@a.com`;
+    const element = { oppId: '585778', firstName: 'testingFirst', lastName: 'testingLast', zipCode: '12345', phoneNumber: '1234567890', email, replies, acceptTermsAndConditions: 'true' };
+    jest.setTimeout(30000);
+    var result = await axios.post(
+        'http://localhost:7071/api/createConnection',
+        JSON.stringify(element),
+    );
+    expect(result.status).toEqual(200);
+
+});
+
+test('createConnectionPost should fail on existing email', async () => {
+    var email = `test_${new Date().getTime()}@a.com`;
+    const element = { oppId: '585778', firstName: 'testingFirst', lastName: 'testingLast', zipCode: '12345', phoneNumber: '1234567890', email: 'test@a.com', replies, acceptTermsAndConditions: 'true' };
+    jest.setTimeout(30000);
+    try {
         var result = await axios.post(
             'http://localhost:7071/api/createConnection',
-            element,
+            JSON.stringify(element),
         );
-        expect(result.resultCode).toEqual(expectedResultCodeConnectionPost[index]);
-        expect(result.data).toMatchSnapshot();
+        expect(result.status).toEqual(2000);
     }
-});
+    catch (err) {        
+        expect(err.response.status).toEqual(400);
+        expect(err.response.data.error).toContain('already exists');
+    }
 
+});

@@ -62,11 +62,11 @@ module.exports = async function (context, req) {
       body: searchOpportunities
     }
   } catch (err) {
-  console.log(err);
-  context.res = {
-    status: err.response.status,
-    body: err
+    context.log(err);
+    context.res = {
+      status: 500,
+      body: err.message
+    }
   }
-}
-context.log('Opp Request return = ', JSON.stringify(context.res).substr(0, 200));
+  context.log('Opp Request return = ', JSON.stringify(context.res).substr(0, 200));
 };
