@@ -21,7 +21,7 @@ module.exports = {
         let greatFor = req.query.greatFor ? req.query.greatFor : '';
         let keywords = req.query.keywords ? req.query.keywords : '';
         let skills = req.query.skills ? `"${req.query.skills.split(",").join('","')}"` : '';
-        let numberOfResults = virtual ? 100 : 25;  //for local searches do only 25 results per volunteermatch request.
+        let numberOfResults = req.query.numberOfResults && req.query.numberOfResults <= 100 ? req.query.numberOfResults : 100;
         
         const params = {
             ids,
