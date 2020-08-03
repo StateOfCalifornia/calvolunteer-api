@@ -25,6 +25,7 @@ module.exports = async function (context, req) {
   context.log('Opp Request Query = ', JSON.stringify(req.query));
 
   const VOL_MATCH_API_URL = process.env.VOL_MATCH_API_URL;
+  const FUNCTION_KEY = process.env.FUNCTION_KEY;
 
   var errorMessage = handler.validateRequest(req);
   if (errorMessage) {
@@ -39,6 +40,9 @@ module.exports = async function (context, req) {
   try {
     // get parameter object from request
     var params = handler.getParameters(req);
+    if(params.key != FUNCTION_KEY){
+      throw new Error("Invalid Function Key");
+    }
 
     //get graph ql 
     const vmQuery = query.generateQuery(params);

@@ -65,7 +65,6 @@ exports[`createQuery should return graphql 1`] = `
           categories,
           classification,
           description,
-          ein,
           id,
           imageUrl,
           mission,

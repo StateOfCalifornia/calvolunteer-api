@@ -11,6 +11,7 @@ module.exports = {
 
 
     getParameters: (req) => {
+        let key = req.query.key ? req.query.key : '';
         let ids = req.query.ids ? req.query.ids : '';
         let location = req.query.location ? req.query.location : '';
         let pageNumber = req.query.pageNumber ? req.query.pageNumber : 1;
@@ -24,6 +25,7 @@ module.exports = {
         let numberOfResults = req.query.numberOfResults && req.query.numberOfResults <= 100 ? req.query.numberOfResults : 100;
         
         const params = {
+            key,
             ids,
             location,
             virtual,

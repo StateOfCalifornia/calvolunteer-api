@@ -35,6 +35,9 @@ module.exports = {
         if(req.method === 'POST'){
             source = req.body;
         }
+        if(source.key != process.env.FUNCTION_KEY){
+            return {errorMessage:'Invalid Key'}
+        }
         if(!source.oppId){
             return {errorMessage:'No Organization Selected'};
         }
