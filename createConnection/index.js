@@ -49,6 +49,9 @@ module.exports = async function (context, req) {
                 'Accept': 'application/json'
             }
         };
+
+        context.log("VOL_MATCH_API_URL=" + VOL_MATCH_API_URL);
+        context.log("queryString=" + queryString);
         const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: queryString }), volMatchOptions)
 
         // If no results found
@@ -57,7 +60,7 @@ module.exports = async function (context, req) {
         }
         if (!response.data.data.createConnection) {
             context.res = {
-                status: response.status,
+                status: 400,
                 body: { error: response.data.errors[0].message }
             }
         } else {
