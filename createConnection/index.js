@@ -52,9 +52,12 @@ module.exports = async function (context, req) {
         const response = await axios.post(VOL_MATCH_API_URL, JSON.stringify({ query: queryString }), volMatchOptions)
 
         // If no results found
+        if(response.data.errors.length){
+            context.log("response message=" + response.data.errors[0].message)
+        }
         if (!response.data.data.createConnection) {
             context.res = {
-                status: 400,
+                status: response.status,
                 body: { error: response.data.errors[0].message }
             }
         } else {
